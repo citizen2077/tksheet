@@ -4134,12 +4134,27 @@ class MainTable(tk.Canvas):
                 self.delete(f"{r1}_{c1}_{r2}_{c2}")
                 self.RI.delete(f"{r1}_{c1}_{r2}_{c2}")
                 self.CH.delete(f"{r1}_{c1}_{r2}_{c2}")
+                r1 = min(len(self.row_positions)-1, r1)
+                c1 = min(len(self.col_positions)-1, c1)
+                r2 = min(len(self.row_positions)-1, r2)
+                c2 = min(len(self.col_positions)-1, c2)
                 if type_.startswith("CellSelect"):
-                    self.create_selected(r1, c1, r2, c2, "cells")
+                    if c1 < len(self.col_positions) and r1 < len(self.row_positions):
+                        r2 = min(len(self.row_positions)-1, r2)
+                        c2 = min(len(self.col_positions)-1, c2)
+                        self.create_selected(r1, c1, r2, c2, "cells")
                 elif type_.startswith("RowSelect"):
-                    self.create_selected(r1, c1, r2, c2, "rows")
+                    if r1 < len(self.row_positions):
+                        c1 = 0
+                        c2 = len(self.col_positions)-1
+                        r2 = min(len(self.row_positions)-1, r2)
+                        self.create_selected(r1, c1, r2, c2, "rows")
                 elif type_.startswith("ColSelect"):
-                    self.create_selected(r1, c1, r2, c2, "cols")
+                    if c1 < len(self.col_positions):
+                        r1 = 0
+                        r2 = len(self.row_positions)-1
+                        c2 = min(len(self.col_positions)-1, c2)
+                        self.create_selected(r1, c1, r2, c2, "cols")
                 elif type_.startswith("Current"):
                     if type_ == "Current_Inside":
                         self.create_current(r1, c1, full_tags[2], inside = True)
